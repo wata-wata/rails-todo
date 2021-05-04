@@ -1,0 +1,70 @@
+<!-- タスク新規作成フォーム -->
+<form method="POST" action="/tasks">
+  <!-- フォームを送るための処理 -->
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+  <div>
+    <label for="task">Task Name</label>
+    <!-- required: 入力必須 -->
+    <input id="task" name="task" type="text" required>
+  </div>
+
+  <div>
+    <select name="state">
+      <% @status.each_with_index do |s,i| %>
+        <option value="<%= s %>"><%= s %></option>
+      <% end %>
+    </select>
+    <label>Task State</label>
+  </div>
+
+  <div>
+    <input type="date" name="limit_date" required>
+    <label>Task Limit Day</label>
+  </div>
+
+  <p>
+    <button type="submit">create</button>
+  </p>
+</form>
+
+<!-- flashメッセージを表示 -->
+<% flash.each do |msg| %>
+  <p><%= msg[1] %></p>
+<% end %>
+
+<!-- タスク一覧を表示する -->
+<table>
+  <thead>
+    <tr>
+      <th>State</th>
+      <th>Limit</th>
+      <th>Task</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tasks.each do |t| %>
+      <tr>
+        <td><%= t.state %></td>
+        <td><%= t.limit_date %></td>
+        <td><%= t.task %></td>
+        <td>
+          <!-- 次のタスク詳細取得画面へのリンク-->
+          <a href="/tasks/<%= t.id %>">edit</a>
+        </td>
+        <td>
+          <!-- 削除ボタン -->
+          <form method="POST" action="/tasks/<%= t.id %>">
+            <!-- DELETE: 削除する -->
+            <input type="hidden" name="_method" value="DELETE">
+            <!-- フォームを送るための処理 -->
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <button type="submit">delete</button>
+          </form>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

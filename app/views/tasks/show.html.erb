@@ -1,0 +1,33 @@
+<form method="POST" action="/tasks/<%= @task.id %>">
+  <!-- PUT: 更新する -->
+  <input type="hidden" name="_method" value="PUT">
+  <!-- フォームを送るための処理 -->
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  
+  <div>
+    <label for="task">Task Name</label>
+    <input value="<%= @task.task %>" id="task" name="task" type="text">
+  </div>
+
+  <div>
+    <select name="state">
+      <% @status.each_with_index do |s,i| %>
+        <% if s == @task.state %>
+          <option value="<%= s %>" selected><%= s %></option>
+        <% else %>
+          <option value="<%= s %>"><%= s %></option>
+        <% end %>
+      <% end %>
+    </select>
+    <label>Task State</label>
+  </div>
+  
+  <div>
+    <input value="<%= @task.limit_date %>" type="date" name="limit_date" required>
+    <label>Task Limit Day</label>
+  </div>
+
+  <p>
+    <button type="submit">update</button>
+  </p>
+</form>
